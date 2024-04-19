@@ -3,9 +3,7 @@ package com.example.minioExample;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.messages.Item;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
