@@ -23,7 +23,6 @@ public class FileUploader {
                     minioClient.bucketExists(BucketExistsArgs.builder().bucket("dev").build());
             if (!found) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket("dev").build());
-                System.out.println("Bucket 'dev' is created.");
             } else {
                 System.out.println("Bucket 'dev' already exists.");
             }
@@ -37,6 +36,12 @@ public class FileUploader {
             System.out.println(
                     "'/Users/Admin/pic.zip' is successfully uploaded as "
                             + "object 'pic-dev.zip' to bucket 'dev'.");
+
+
+            Iterable<Result<Item>> results = minioClient.listObjects(
+                    ListObjectsArgs.builder().bucket("dev").build());
+
+            System.out.println(results.iterator().next().get().objectName());
         } catch (MinioException e) {
             System.out.println("Error occurred: " + e);
             System.out.println("HTTP trace: " + e.httpTrace());
