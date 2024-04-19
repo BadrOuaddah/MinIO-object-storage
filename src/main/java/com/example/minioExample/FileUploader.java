@@ -1,11 +1,11 @@
 package com.example.minioExample;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.UploadObjectArgs;
+import io.minio.*;
 import io.minio.errors.MinioException;
+import io.minio.messages.Item;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -15,7 +15,7 @@ public class FileUploader {
         try {
             MinioClient minioClient =
                     MinioClient.builder()
-                            .endpoint("http://127.0.0.1:9001/")
+                            .endpoint("http://127.0.0.1:9000")
                             .credentials("sGSlI88JNcEJlkTeG2Jr", "ZiXPazkajKDM8QTqehPXms1oJnvzbPGSpjRGmULc")
                             .build();
 
@@ -23,6 +23,7 @@ public class FileUploader {
                     minioClient.bucketExists(BucketExistsArgs.builder().bucket("dev").build());
             if (!found) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket("dev").build());
+                System.out.println("Bucket 'dev' is created.");
             } else {
                 System.out.println("Bucket 'dev' already exists.");
             }
