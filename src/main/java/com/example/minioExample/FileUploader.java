@@ -3,9 +3,11 @@ package com.example.minioExample;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.messages.Item;
+
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 
 public class FileUploader {
     public static void main(String[] args)
@@ -28,7 +30,7 @@ public class FileUploader {
             minioClient.uploadObject(
                     UploadObjectArgs.builder()
                             .bucket("dev")
-                            .object("pic-dev.zip")
+                            .object("compressed")
                             .filename("C:\\Users\\\\Admin\\pic.zip")
                             .build());
             System.out.println(
@@ -36,10 +38,15 @@ public class FileUploader {
                             + "object 'pic-dev.zip' to bucket 'dev'.");
 
 
-            Iterable<Result<Item>> results = minioClient.listObjects(
-                    ListObjectsArgs.builder().bucket("dev").build());
+            ListObjectsArgs dev = ListObjectsArgs.builder().bucket("dev").includeVersions(true).recursive(true).build();
+            Iterable<Result<Item>> results = minioClient.listObjects(dev);
+            Iterator<Result<Item>> iterator = results.iterator();
 
-            System.out.println(results.iterator().next().get().objectName());
+
+            while (iterator.hasNext()) {
+                Item i = iterator.next().get();
+                System.out.println("Object: " + i.objectName() +"with size: "+ i.size());
+            }
         } catch (MinioException e) {
             System.out.println("Error occurred: " + e);
             System.out.println("HTTP trace: " + e.httpTrace());
