@@ -2,6 +2,7 @@ package com.example.minioExample;
 
 import io.minio.*;
 import io.minio.errors.MinioException;
+import io.minio.http.Method;
 import io.minio.messages.Item;
 
 import java.io.IOException;
@@ -27,16 +28,25 @@ public class FileUploader {
                 System.out.println("Bucket 'dev' already exists.");
             }
 
-            minioClient.uploadObject(
+            ObjectWriteResponse objectWriteResponse = minioClient.uploadObject(
                     UploadObjectArgs.builder()
                             .bucket("dev")
                             .object("compressed")
                             .filename("C:\\Users\\\\Admin\\pic.zip")
                             .build());
+            System.out.println(objectWriteResponse);
             System.out.println(
                     "'/Users/Admin/pic.zip' is successfully uploaded as "
                             + "object 'pic-dev.zip' to bucket 'dev'.");
 
+            String url = minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.GET)
+                            .bucket("dev")
+                            .object("compressed")
+                            .build());
+
+            System.out.println(url);
 
             ListObjectsArgs dev = ListObjectsArgs.builder().bucket("dev").includeVersions(true).recursive(true).build();
             Iterable<Result<Item>> results = minioClient.listObjects(dev);
