@@ -6,6 +6,9 @@ import io.minio.http.Method;
 import io.minio.messages.Item;
 
 import java.io.IOException;
+import java.io.File;
+import java.net.URL;
+import java.util.Objects;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
@@ -17,7 +20,7 @@ public class FileUploader {
             MinioClient minioClient =
                     MinioClient.builder()
                             .endpoint("http://localhost:9000")
-                            .credentials("sGSlI88JNcEJlkTeG2Jr", "ZiXPazkajKDM8QTqehPXms1oJnvzbPGSpjRGmULc")
+                            .credentials("minioadmin", "minioadmin")
                             .build();
 
             boolean found =
@@ -27,17 +30,20 @@ public class FileUploader {
             } else {
                 System.out.println("Bucket 'dev' already exists.");
             }
+            ClassLoader classLoader = FileUploader.class.getClassLoader();
+            URL resource = Objects.requireNonNull(classLoader.getResource("sample.pdf"));
+            File file = new File(resource.getFile());
 
             ObjectWriteResponse objectWriteResponse = minioClient.uploadObject(
                     UploadObjectArgs.builder()
                             .bucket("dev")
                             .object("compressed")
-                            .filename("C:\\Users\\\\Admin\\pic.zip")
+                            .filename(file.getAbsolutePath())
                             .build());
             System.out.println(objectWriteResponse);
             System.out.println(
-                    "'/Users/Admin/pic.zip' is successfully uploaded as "
-                            + "object 'pic-dev.zip' to bucket 'dev'.");
+                    "'sample.pdf' is successfully uploaded as "
+                            + "object 'sample.pdf' to bucket 'dev'.");
 
             String url = minioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
