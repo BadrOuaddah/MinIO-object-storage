@@ -37,7 +37,7 @@ public class FileUploader {
             ObjectWriteResponse objectWriteResponse = minioClient.uploadObject(
                     UploadObjectArgs.builder()
                             .bucket("dev")
-                            .object("compressed")
+                            .object("sample")
                             .filename(file.getAbsolutePath())
                             .build());
             System.out.println(objectWriteResponse);
@@ -49,7 +49,7 @@ public class FileUploader {
                     GetPresignedObjectUrlArgs.builder()
                             .method(Method.GET)
                             .bucket("dev")
-                            .object("compressed")
+                            .object("sample")
                             .build());
 
             System.out.println(url);
@@ -61,7 +61,7 @@ public class FileUploader {
 
             while (iterator.hasNext()) {
                 Item i = iterator.next().get();
-                System.out.println("Object: " + i.objectName() +"with size: "+ i.size());
+                System.out.println("Object: " + i.objectName() +" with size: "+ i.size());
             }
         } catch (MinioException e) {
             System.out.println("Error occurred: " + e);
