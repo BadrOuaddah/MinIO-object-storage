@@ -4,6 +4,7 @@ This is a simple example of Object storage with MinIO 🦩
 
 ## Versions
 + Java 17
++ Spring boot 3.2.4
 + Maven 4.0.0
 + MinIO 8.5.9
 
